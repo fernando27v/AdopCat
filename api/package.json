@@ -20,5 +20,8 @@
     "nodemon": "^2.0.16",
     "pg": "^8.7.3",
     "sequelize": "^6.20.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.0.1"
   }
 }

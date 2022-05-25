@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME,API_KEY } = process.env;
 const axios = require("axios")
+const {faker} = require("@faker-js/faker")
 
 
 let sequelize =
@@ -72,7 +73,14 @@ Cat.belongsTo(Breed);
 User.belongsToMany(Cat, { through: 'Favorites' });
 Cat.belongsToMany(User, { through: 'Favorites' });
 
-(async () =>{ 
+User.hasMany(Cat);
+Cat.hasOne(User);
+
+
+
+//Carga de datos a la tabla Breed
+//Ejecutar una vez, luego comentar la funcion para un funcionamiento mas optimo
+async function ChargeBreed(){ 
   try{
      const resp = await axios.get(`https://api.thecatapi.com/v1/breeds?api_key=${API_KEY}`)
      resp.data.forEach(async (breed)=>{
@@ -88,7 +96,35 @@ Cat.belongsToMany(User, { through: 'Favorites' });
   }catch(err){
     console.error(err)
   }
-})()
+}
+
+// ChargeBreed()
+
+//Carga de datos a la tabla Cat
+//Ejecutar una vez, luego comentar la funcion para un funcionamiento mas optimo
+async function ChargeCats(){ 
+  try{
+    var i = 0;
+     while(i<100){
+         const caty = await Cat.findOrCreate({where:{
+      name:faker.name.firstName(),
+      age:faker.random.numeric(),
+      img:faker.image.cats(),
+      address:faker.address.streetAddress(),
+      description: "I'm a cute cat that needs a lot of love, adopt me please!",
+      phone_number:faker.phone.phoneNumber(),
+      BreedId:Math.floor(Math.random() * (67 - 1) + 1)
+    }})
+    i++;
+     }
+ 
+
+  }catch(err){
+    console.error(err)
+  }   
+}
+
+// ChargeCats()
 
 
 

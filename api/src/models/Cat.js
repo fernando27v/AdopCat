@@ -17,13 +17,22 @@ module.exports = (sequelize) => {
            allowNull: false
        },
        age:{
-            type: DataTypes.INTEGER,  
+            type: DataTypes.STRING,  
        },
        img:{
            type: DataTypes.STRING,
+            allowNull: false
        },
        address:{
             type: DataTypes.TEXT,
+            allowNull: false
+       },
+       phone_number:{
+           type: DataTypes.STRING,
+       },
+       isAdopted:{
+           type: DataTypes.BOOLEAN,
+           defaultValue: false
        }
 
 
