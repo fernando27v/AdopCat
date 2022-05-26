@@ -1,0 +1,23 @@
+.divText{
+    width: 100%;
+    max-width: 500px;
+    margin: 3rem;
+    text-align: center;
+    display: inline-grid;
+
+}
+
+.divLanding{
+    background-image: url('../../assets/BackgroundLanding.jpg');
+    background-size: cover;
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .divText{
+        margin: 0.2rem;
+        font-size: 40px;
+    }
+}
