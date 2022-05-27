@@ -4,3 +4,5 @@ const {getBreeds} = require("../controllers/breeds/getBreeds");
 const breedsRouter = Router();
 
 breedsRouter.get("/", getBreeds)
+
+module.exports = breedsRouter;

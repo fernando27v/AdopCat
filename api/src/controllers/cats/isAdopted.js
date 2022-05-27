@@ -9,7 +9,7 @@ module.exports = {
         
             const cat =  await Cat.findByPk(id)
             if(!cat){
-                res.status(404).json({success:false,message:"Cat not found"})
+                throw new Error("Cat not found")
             }
 
          cat.isAdopted = !cat.isAdopted
