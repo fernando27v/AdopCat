@@ -11,7 +11,7 @@ login : async (req,res)=>{
     const login = await User.findOne({where:{email},attributes:['password']})
 
    if(!login){
-    return res.status(404).json({success:false,message:"Email dont exist"})
+    throw new Error("Email dont exist")
    }
 
         bcrypt.compare(password,login.password,async (err,result)=>{
@@ -22,14 +22,14 @@ login : async (req,res)=>{
                 message:user
                  }) 
             }else{
-                return res.status(404).json({success:false,message:"Password dont match"})
+                throw new Error("Password dont match")
             }
         })
   
     }catch(err){
         return res.status(500).json({
             success:false,
-            error:err.message
+            message:err.message
         })
     }
    

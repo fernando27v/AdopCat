@@ -14,7 +14,7 @@ module.exports = {
               await user.update({password},{where:{email}})
               return  res.status(200).json({success:true,message:"Password updated successfully"})
         }else{
-          return  res.status(404).json({success:false,message:"Email or answers incorrect"})
+          throw new Error("Email or answers incorrect")
         }
 
         
