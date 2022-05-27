@@ -1,0 +1,12 @@
+.divCats{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-evenly;
+    
+}
+
+.divPaginate{
+    margin: 1rem;
+}
