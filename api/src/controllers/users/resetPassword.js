@@ -6,7 +6,7 @@ module.exports = {
     resetPassword: async (req, res) => {
 
             var {email,favorite_movie,mother_first_name,password} = req.body;
-      
+      try{
         const user = await User.findOne({where:{email,favorite_movie,mother_first_name}})
         
         if(user){
@@ -16,6 +16,13 @@ module.exports = {
         }else{
           throw new Error("Email or answers incorrect")
         }
+      }catch(err){
+        res.status(500).json({
+          success:false,
+          message:err.message
+        })
+      }
+        
 
         
 

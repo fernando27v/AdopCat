@@ -17,6 +17,8 @@ module.exports = {
     favorite_movie = favorite_movie.toLowerCase();
     mother_first_name = mother_first_name.toLowerCase();
 
+    try{
+
     const user = await User.findOne({ where: { email } });
 
     if (user) {
@@ -24,7 +26,7 @@ module.exports = {
     }
     password = bcrypt.hashSync(password, 10);
 
-    try {
+  
       const userCreated = await User.create({
         name,
         lastName,
@@ -40,9 +42,9 @@ module.exports = {
         message: "User created successfully",
       });
     } catch (err) {
-      res.status(500).json({
+     return res.status(500).json({
         success: false,
-        message: err.message,
+        message: err.message
       });
     }
   },
