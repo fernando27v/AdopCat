@@ -1,20 +1,17 @@
 import { useState, useEffect } from "react";
 import { TextField, Button } from "@mui/material";
-import styles from "./SignUp.module.css";
+import styles from "./ResetPassword.module.css";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {useNavigate} from "react-router-dom"
 
-function SignUp() {
+function ResetPassword() {
   const [input, setInput] = useState({
     email: "",
-    password: "",
-    name: "",
-    lastName: "",
-    date_of_birth: "",
     favorite_movie: "",
     mother_first_name: "",
+    password: "",
   });
   const navigate = useNavigate();
   const [response, setResponse] = useState({ success: "", message: "" });
@@ -30,7 +27,6 @@ function SignUp() {
       setResponse("");
       navigate("/login")
     } else if (response.success === false) {
-      console.log(response);
       Swal.fire({
         title: `${response.message}`,
         text: "Do you want to continue",
@@ -47,7 +43,6 @@ function SignUp() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    setResponse("");
   };
 
   const disableButton = () => {
@@ -55,8 +50,6 @@ function SignUp() {
       input.email === "" ||
       input.password === "" ||
       input.favorite_movie === "" ||
-      input.name === "" ||
-      input.lastName === "" ||
       input.mother_first_name === ""
     ) {
       return true;
@@ -68,8 +61,8 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:3002/api/user/signup",
+      const res = await axios.put(
+        "http://localhost:3002/api/user/password",
         input
       );
       setResponse(res.data);
@@ -80,9 +73,6 @@ function SignUp() {
     setInput({
       email: "",
       password: "",
-      name: "",
-      lastName: "",
-      date_of_birth: "",
       favorite_movie: "",
       mother_first_name: "",
     });
@@ -91,26 +81,6 @@ function SignUp() {
   return (
     <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
       <div className={styles.divForm}>
-        <div style={{ textAlign: "center" }}>
-          <TextField
-            required
-            id="Name"
-            label="First name"
-            value={input.name}
-            onChange={(e) => handleChange(e)}
-            name="name"
-            sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
-          />
-          <TextField
-            required
-            id="Last_name"
-            label="Last name"
-            value={input.lastName}
-            onChange={(e) => handleChange(e)}
-            name="lastName"
-            sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
-          />
-        </div>
         <div style={{ textAlign: "center" }}>
           <TextField
             required
@@ -125,7 +95,7 @@ function SignUp() {
           <TextField
             required
             id="Password"
-            label="Password"
+            label="New password"
             type="password"
             value={input.password}
             onChange={(e) => handleChange(e)}
@@ -142,7 +112,6 @@ function SignUp() {
             value={input.favorite_movie}
             onChange={(e) => handleChange(e)}
             name="favorite_movie"
-            helperText="For reset password."
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
           <TextField
@@ -152,20 +121,9 @@ function SignUp() {
             value={input.mother_first_name}
             onChange={(e) => handleChange(e)}
             name="mother_first_name"
-            helperText="For reset password."
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
         </div>
-        <TextField
-          id="Date_of_birth"
-          label="Date of birth"
-          type="date"
-          value={input.date_of_birth}
-          onChange={(e) => handleChange(e)}
-          name="date_of_birth"
-          InputLabelProps={{ shrink: true }}
-          sx={{ marginTop: "20px" }}
-        />
       </div>
       <Button
         variant="contained"
@@ -175,10 +133,10 @@ function SignUp() {
         onClick={(e) => handleSubmit(e)}
         endIcon={<SendIcon />}
       >
-        Submit
+        Reset Password
       </Button>
     </form>
   );
 }
 
-export default SignUp;
+export default ResetPassword;

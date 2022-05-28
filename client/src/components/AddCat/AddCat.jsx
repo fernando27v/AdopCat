@@ -1,20 +1,32 @@
 import { useState, useEffect } from "react";
 import { TextField, Button } from "@mui/material";
-import styles from "./SignUp.module.css";
+import { styled } from '@mui/material/styles';
+import styles from "./AddCat.module.css";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import { getBreeds } from "../../redux/slices/catSlice"
 
-function SignUp() {
+const Input = styled('input')({
+    display: 'none',
+  });
+
+function AddCat() {
+  const loggedUser = useSelector((state) => state.userSlice.loggedUser);
+  const breeds = useSelector((state) => state.catSlice.breeds);
+  const dispatch= useDispatch();
+
   const [input, setInput] = useState({
-    email: "",
-    password: "",
     name: "",
-    lastName: "",
-    date_of_birth: "",
-    favorite_movie: "",
-    mother_first_name: "",
+    age: "",
+    img: "",
+    address: "",
+    description: "",
+    phone_number: "",
+    BreedId: "",
+    UserId: loggedUser.id,
   });
   const navigate = useNavigate();
   const [response, setResponse] = useState({ success: "", message: "" });
@@ -28,7 +40,7 @@ function SignUp() {
         confirmButtonText: "Cool",
       });
       setResponse("");
-      navigate("/login")
+      navigate("/home");
     } else if (response.success === false) {
       console.log(response);
       Swal.fire({
@@ -41,23 +53,37 @@ function SignUp() {
     }
   }, [response.success]);
 
+  useEffect(() => {
+    if(breeds.length===0)dispatch(getBreeds())
+  });
+
   const handleChange = (e) => {
     e.preventDefault();
     setInput((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    setResponse("");
+    if(e.target.name === "img"){
+      const src = window.URL.createObjectURL(e.target.files[0]);
+        setInput((prev) => ({
+          ...prev,
+          img: src,
+        }));
+      Swal.fire({
+        title: "Image upload successfully",
+        text: "Do you want to continue",
+        icon: "success",
+        confirmButtonText: "Cool",
+      });
+    }
   };
 
   const disableButton = () => {
     if (
-      input.email === "" ||
-      input.password === "" ||
-      input.favorite_movie === "" ||
       input.name === "" ||
-      input.lastName === "" ||
-      input.mother_first_name === ""
+      input.description === "" ||
+      input.address === "" ||
+      input.img === ""
     ) {
       return true;
     } else {
@@ -68,23 +94,20 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:3002/api/user/signup",
-        input
-      );
+      const res = await axios.post("http://localhost:3002/api/cats/", input);
       setResponse(res.data);
     } catch (err) {
       setResponse(err.response.data);
     }
 
     setInput({
-      email: "",
-      password: "",
       name: "",
-      lastName: "",
-      date_of_birth: "",
-      favorite_movie: "",
-      mother_first_name: "",
+      age: "",
+      img: "",
+      address: "",
+      description: "",
+      phone_number: "",
+      BreedId: "",
     });
   };
 
@@ -95,7 +118,7 @@ function SignUp() {
           <TextField
             required
             id="Name"
-            label="First name"
+            label="Name"
             value={input.name}
             onChange={(e) => handleChange(e)}
             name="name"
@@ -103,58 +126,61 @@ function SignUp() {
           />
           <TextField
             required
-            id="Last_name"
-            label="Last name"
-            value={input.lastName}
+            id="Description"
+            label="Description"
+            multiline
+            maxRows={5}
+            value={input.description}
             onChange={(e) => handleChange(e)}
-            name="lastName"
+            name="description"
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
         </div>
         <div style={{ textAlign: "center" }}>
           <TextField
             required
-            id="Email"
-            label="Email"
-            type="email"
-            value={input.email}
+            id="Address"
+            label="Address"
+            value={input.address}
             onChange={(e) => handleChange(e)}
-            name="email"
+            name="address"
+            helperText="Cat location."
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
           <TextField
-            required
-            id="Password"
-            label="Password"
-            type="password"
-            value={input.password}
+            id="Phone_number"
+            label="Phone_number"
+            value={input.phone_number}
             onChange={(e) => handleChange(e)}
-            name="password"
-            autoComplete="current-password"
+            name="phone_number"
+            helperText="Phone number for more information."
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
         </div>
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center",display: "flex",alignItems: "center" }}>
           <TextField
-            required
-            id="Favorite_movie"
-            label="Favorite movie"
-            value={input.favorite_movie}
+            id="Age"
+            label="Age"
+            value={input.age}
             onChange={(e) => handleChange(e)}
-            name="favorite_movie"
-            helperText="For reset password."
+            name="age"
+            type="number"
+            helperText="Aproximated age in years."
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
-          <TextField
-            required
-            id="Mother_first_name"
-            label="Mother first name"
-            value={input.mother_first_name}
-            onChange={(e) => handleChange(e)}
-            name="mother_first_name"
-            helperText="For reset password."
-            sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
-          />
+          <label htmlFor="contained-button-file">
+            <Input
+              accept="image/*"
+              id="contained-button-file"
+              multiple
+              type="file"
+              name="img"
+              onChange={(e) => handleChange(e)}
+            />
+            <Button variant="contained" component="span">
+              Upload of cat image 
+            </Button>
+          </label>
         </div>
         <TextField
           id="Date_of_birth"
@@ -181,4 +207,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default AddCat;

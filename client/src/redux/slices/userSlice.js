@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const logIn = createAsyncThunk("user/logIn", async (user, thunkAPI) => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         "http://localhost:3002/api/user/login",
         user
       );
@@ -28,14 +28,14 @@ export const logIn = createAsyncThunk("user/logIn", async (user, thunkAPI) => {
     },
     extraReducers: (builder) => {
       builder.addCase(logIn.fulfilled, (state, action) => {
-        state.loggedUser = action.payload;
+        state.loggedUser = action.payload.message;
         state.isLoading = false;
       });
       builder.addCase(logIn.pending, (state, action) => {
         state.isLoading = true;
       });
       builder.addCase(logIn.rejected, (state, action) => {
-        state.rejectedUser = action.payload;
+        state.rejectedUser = action.payload.message;
         state.isLoading = false;
       });
     },
