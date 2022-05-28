@@ -5,6 +5,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import {logOut} from "../../redux/slices/userSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -49,6 +51,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function NavBar() {
+  const loggedUser = useSelector((state) => state.userSlice.loggedUser);
+  const dispatch = useDispatch();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "#30a139" }}>
@@ -70,16 +74,40 @@ function NavBar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
-            <Button color="inherit" sx={{ marginLeft: "0.5rem" }}>
-              Login
-            </Button>
-          </Link>
-          <Link to="/signup" style={{ textDecoration: "none", color: "white" }}>
+          {
+            Object.entries(loggedUser).length === 0 ? 
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                <Button color="inherit" sx={{ marginLeft: "0.5rem" }}>
+                  Login
+                </Button>
+              </Link>
+             : 
+              <Link
+                to="/profile"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                <Button color="inherit" sx={{ marginLeft: "0.5rem" }}>
+                  Profile
+                </Button>
+              </Link>
+            
+          }
+          {
+            Object.entries(loggedUser).length === 0 ? 
+            <Link to="/signup" style={{ textDecoration: "none", color: "white" }}>
             <Button color="inherit" sx={{ marginLeft: "0.5rem" }}>
               SignUp
             </Button>
-          </Link>
+          </Link> : 
+            <Button color="inherit" sx={{ marginLeft: "0.5rem" }} onClick={()=>dispatch(logOut())}>
+              Log Out
+            </Button>
+      
+          }
+          
         </Toolbar>
       </AppBar>
     </Box>

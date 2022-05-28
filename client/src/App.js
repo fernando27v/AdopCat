@@ -6,6 +6,8 @@ import NavBar from "./components/NavBar/NavBar";
 import Home from "./components/Home/Home";
 import SignUp from "./components/SignUp/SignUp";
 import LogIn from "./components/LogIn/LogIn";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import AddCat from './components/AddCat/AddCat';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route exact path="/home" element={<Home />} />
         <Route exact path="/signup" element={<SignUp />} />
         <Route exact path="/login" element={<LogIn />} />
+        <Route exact path="/reset-password" element={<ResetPassword />} />
+        <Route exact path="/add-cat" element={<AddCat />} />
       </Routes>
     </BrowserRouter>
   );
