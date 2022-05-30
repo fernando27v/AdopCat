@@ -74,7 +74,7 @@ User.belongsToMany(Cat, { through: 'Favorites' });
 Cat.belongsToMany(User, { through: 'Favorites' });
 
 User.hasMany(Cat);
-Cat.hasOne(User);
+Cat.belongsTo(User);
 
 
 
