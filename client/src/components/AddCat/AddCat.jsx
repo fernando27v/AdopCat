@@ -8,6 +8,10 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import { getBreeds } from "../../redux/slices/catSlice"
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const Input = styled('input')({
     display: 'none',
@@ -83,7 +87,8 @@ function AddCat() {
       input.name === "" ||
       input.description === "" ||
       input.address === "" ||
-      input.img === ""
+      input.img === "" ||
+      input.BreedId === ""
     ) {
       return true;
     } else {
@@ -112,7 +117,7 @@ function AddCat() {
   };
 
   return (
-    <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
+    <form className={styles.form} onSubmit={(e) => handleSubmit(e)} >
       <div className={styles.divForm}>
         <div style={{ textAlign: "center" }}>
           <TextField
@@ -149,7 +154,7 @@ function AddCat() {
           />
           <TextField
             id="Phone_number"
-            label="Phone_number"
+            label="Phone number"
             value={input.phone_number}
             onChange={(e) => handleChange(e)}
             name="phone_number"
@@ -157,7 +162,7 @@ function AddCat() {
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
         </div>
-        <div style={{ textAlign: "center",display: "flex",alignItems: "center" }}>
+        <div style={{ textAlign: "center",display: "flex", alignItems: "baseline" }}>
           <TextField
             id="Age"
             label="Age"
@@ -168,7 +173,7 @@ function AddCat() {
             helperText="Aproximated age in years."
             sx={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
           />
-          <label htmlFor="contained-button-file">
+          <label htmlFor="contained-button-file" style={{margin:"20px 20px 0px 20px"}}>
             <Input
               accept="image/*"
               id="contained-button-file"
@@ -182,16 +187,25 @@ function AddCat() {
             </Button>
           </label>
         </div>
-        <TextField
-          id="Date_of_birth"
-          label="Date of birth"
-          type="date"
-          value={input.date_of_birth}
+        <div>
+         <FormControl  sx={{ m: 1, minWidth: 230,margin: "20px 20px 0px 20px" }}>
+        <InputLabel id="demo-simple-select-autowidth-label">Breed</InputLabel>
+        <Select
+        required
+          labelId="demo-simple-select-autowidth-label"
+          id="demo-simple-select-autowidth"
+          value={input.BreedId}
           onChange={(e) => handleChange(e)}
-          name="date_of_birth"
-          InputLabelProps={{ shrink: true }}
-          sx={{ marginTop: "20px" }}
-        />
+          label="Breed"
+          name="BreedId"
+        >
+          {breeds && breeds.map((b)=>{
+            return <MenuItem value={b.id} key={b.id}>{b.name}</MenuItem>
+          })}
+        </Select>
+      </FormControl>
+      {input.img && <img src={input.img} alt="cat" style={{width: "210px",height: "150px",marginLeft: "20px"}}/>}
+      </div>
       </div>
       <Button
         variant="contained"

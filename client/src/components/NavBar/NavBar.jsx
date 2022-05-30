@@ -65,7 +65,7 @@ function NavBar() {
             component="div"
             sx={{ flexGrow: 1 }}
           ></Typography>
-          <Search>
+          {/* <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -73,9 +73,20 @@ function NavBar() {
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
-          </Search>
+          </Search> */}
           {
-            Object.entries(loggedUser).length === 0 ? 
+            Object.entries(loggedUser).length > 0 &&
+            <Link
+            to="/add-cat"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            <Button color="inherit" sx={{ marginLeft: "0.5rem" }}>
+              Add Cat
+            </Button>
+          </Link>
+          }
+          {
+            Object.entries(loggedUser).length === 0 &&
               <Link
                 to="/login"
                 style={{ textDecoration: "none", color: "white" }}
@@ -84,16 +95,6 @@ function NavBar() {
                   Login
                 </Button>
               </Link>
-             : 
-              <Link
-                to="/profile"
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                <Button color="inherit" sx={{ marginLeft: "0.5rem" }}>
-                  Profile
-                </Button>
-              </Link>
-            
           }
           {
             Object.entries(loggedUser).length === 0 ? 
