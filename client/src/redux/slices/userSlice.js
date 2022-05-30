@@ -18,13 +18,16 @@ export const logIn = createAsyncThunk("user/logIn", async (user, thunkAPI) => {
     initialState: {
       loggedUser: {},
       isLoading: false,
-      rejectedUser: {},
+      rejectedUser: "",
     },
   
     reducers: {
       logOut: (state) => {
         state.loggedUser = {};
       },
+      deleteRejectedUser: (state) => {
+        state.rejectedUser = "";
+      }
     },
     extraReducers: (builder) => {
       builder.addCase(logIn.fulfilled, (state, action) => {
@@ -41,6 +44,6 @@ export const logIn = createAsyncThunk("user/logIn", async (user, thunkAPI) => {
     },
   });
   
-  export const { logOut } = userSlice.actions;
+  export const { logOut,deleteRejectedUser } = userSlice.actions;
   export default userSlice.reducer;
   

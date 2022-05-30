@@ -4,7 +4,7 @@ import styles from "./LogIn.module.css";
 import SendIcon from "@mui/icons-material/Send";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logIn } from "../../redux/slices/userSlice";
+import { logIn,deleteRejectedUser } from "../../redux/slices/userSlice";
 import Swal from "sweetalert2";
 
 function LogIn() {
@@ -27,6 +27,7 @@ function LogIn() {
         icon: "error",
         confirmButtonText: "Ok",
       });
+      dispatch(deleteRejectedUser())
     }
   }, [Object.entries(loggedUser).length,rejectedUser]);
 
